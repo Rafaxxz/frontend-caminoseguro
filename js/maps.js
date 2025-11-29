@@ -1,30 +1,22 @@
 /**
- * CaminoSeguro - Google Maps Integration
- * Configuración y utilidades para mapas
+ * CaminoSeguro - Leaflet/OpenStreetMap Integration
+ * Configuración y utilidades para mapas (100% gratis, sin API keys)
  */
 
 // Configuración del mapa centrado en Lima, Perú
 const MAP_CONFIG = {
-  center: { lat: -12.0464, lng: -77.0428 }, // Lima Centro
-  zoom: 13,
-  styles: [
-    {
-      featureType: "poi",
-      elementType: "labels",
-      stylers: [{ visibility: "off" }]
-    }
-  ]
+  center: [-12.0464, -77.0428], // Lima Centro [lat, lng]
+  zoom: 13
 };
 
 // Variable global para almacenar instancias de mapas
 let maps = {};
 let markers = [];
-let heatmapLayer = null;
-let directionsService = null;
-let directionsRenderer = null;
+let heatLayer = null;
+let routingControl = null;
 
 /**
- * Inicializa un mapa de Google en un contenedor
+ * Inicializa un mapa de Leaflet en un contenedor
  */
 function initMap(containerId, options = {}) {
   const container = document.getElementById(containerId);
@@ -36,15 +28,17 @@ function initMap(containerId, options = {}) {
   const mapOptions = {
     center: options.center || MAP_CONFIG.center,
     zoom: options.zoom || MAP_CONFIG.zoom,
-    styles: MAP_CONFIG.styles,
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: true,
     zoomControl: true,
     ...options
   };
 
-  const map = new google.maps.Map(container, mapOptions);
+  const map = L.map(containerId, mapOptions);
+  
+  // Añadir capa de OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
   maps[containerId] = map;
   
   return map;
@@ -57,87 +51,88 @@ function initHeatMap(containerId) {
   const map = initMap(containerId, { zoom: 12 });
   if (!map) return null;
 
-  // Obtener datos del heatmap desde la API
+  // Obtener datos del heatmap
   loadHeatmapData(map);
   
   return map;
 }
 
 /**
- * Carga datos del heatmap desde la API
+ * Carga datos del heatmap
  */
 async function loadHeatmapData(map, filter = 'all', timeRange = '7d') {
   try {
     // Intentar cargar desde la API
-    const response = await api.get(`/heatmap?timeRange=${timeRange}${filter !== 'all' ? `&type=${filter}` : ''}`).catch(() => null);
-    
     let heatmapData = [];
     
-    if (response && response.success && response.data) {
-      // Usar datos reales de la API
-      heatmapData = response.data.map(zone => ({
-        location: new google.maps.LatLng(zone.latitude, zone.longitude),
-        weight: zone.intensity || zone.count || 1
-      }));
-    } else {
-      // Datos de demostración para Lima
+    try {
+      const response = await api.get(`/heatmap?timeRange=${timeRange}${filter !== 'all' ? `&type=${filter}` : ''}`);
+      if (response && response.success && response.data) {
+        heatmapData = response.data.map(zone => [
+          zone.latitude,
+          zone.longitude,
+          zone.intensity || zone.count || 1
+        ]);
+      }
+    } catch (e) {
+      // Usar datos demo si la API falla
+      heatmapData = getDemoHeatmapData();
+    }
+
+    if (heatmapData.length === 0) {
       heatmapData = getDemoHeatmapData();
     }
 
     // Remover heatmap anterior si existe
-    if (heatmapLayer) {
-      heatmapLayer.setMap(null);
+    if (heatLayer) {
+      map.removeLayer(heatLayer);
     }
 
     // Crear nueva capa de heatmap
-    heatmapLayer = new google.maps.visualization.HeatmapLayer({
-      data: heatmapData,
-      map: map,
-      radius: 50,
-      opacity: 0.7,
-      gradient: [
-        'rgba(0, 255, 0, 0)',
-        'rgba(0, 255, 0, 1)',
-        'rgba(255, 255, 0, 1)',
-        'rgba(255, 165, 0, 1)',
-        'rgba(255, 0, 0, 1)'
-      ]
-    });
+    heatLayer = L.heatLayer(heatmapData, {
+      radius: 35,
+      blur: 25,
+      maxZoom: 17,
+      max: 10,
+      gradient: {
+        0.0: 'green',
+        0.3: 'yellow',
+        0.6: 'orange',
+        1.0: 'red'
+      }
+    }).addTo(map);
 
   } catch (error) {
     console.error('Error loading heatmap data:', error);
-    // Cargar datos demo en caso de error
     const demoData = getDemoHeatmapData();
-    heatmapLayer = new google.maps.visualization.HeatmapLayer({
-      data: demoData,
-      map: map,
-      radius: 50,
-      opacity: 0.7
-    });
+    heatLayer = L.heatLayer(demoData, {
+      radius: 35,
+      blur: 25,
+      maxZoom: 17
+    }).addTo(map);
   }
 }
 
 /**
- * Datos de demostración para el heatmap
+ * Datos de demostración para el heatmap [lat, lng, intensity]
  */
 function getDemoHeatmapData() {
-  const baseLocations = [
-    { lat: -12.0464, lng: -77.0428, weight: 10 }, // Centro de Lima
-    { lat: -12.1191, lng: -77.0311, weight: 8 },  // Miraflores
-    { lat: -12.0975, lng: -77.0528, weight: 7 },  // San Isidro
-    { lat: -12.0563, lng: -77.0842, weight: 9 },  // Pueblo Libre
-    { lat: -12.0789, lng: -76.9714, weight: 6 },  // La Victoria
-    { lat: -12.0432, lng: -77.0282, weight: 8 },  // Cercado
-    { lat: -12.1108, lng: -77.0178, weight: 5 },  // Barranco
-    { lat: -12.0865, lng: -77.0015, weight: 7 },  // Surquillo
-    { lat: -12.1347, lng: -77.0147, weight: 4 },  // Chorrillos
-    { lat: -12.0697, lng: -77.0336, weight: 6 },  // Lince
+  return [
+    [-12.0464, -77.0428, 10], // Centro de Lima
+    [-12.1191, -77.0311, 8],  // Miraflores
+    [-12.0975, -77.0528, 7],  // San Isidro
+    [-12.0563, -77.0842, 9],  // Pueblo Libre
+    [-12.0789, -76.9714, 6],  // La Victoria
+    [-12.0432, -77.0282, 8],  // Cercado
+    [-12.1108, -77.0178, 5],  // Barranco
+    [-12.0865, -77.0015, 7],  // Surquillo
+    [-12.1347, -77.0147, 4],  // Chorrillos
+    [-12.0697, -77.0336, 6],  // Lince
+    [-12.0550, -77.0450, 7],  // Breña
+    [-12.0720, -77.0600, 5],  // Jesús María
+    [-12.1050, -77.0250, 6],  // Surco
+    [-12.0380, -77.0550, 8],  // San Miguel
   ];
-
-  return baseLocations.map(loc => ({
-    location: new google.maps.LatLng(loc.lat, loc.lng),
-    weight: loc.weight
-  }));
 }
 
 /**
@@ -146,47 +141,121 @@ function getDemoHeatmapData() {
 function initRoutesMap(containerId) {
   const map = initMap(containerId, { zoom: 14 });
   if (!map) return null;
-
-  // Inicializar servicios de direcciones
-  directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer({
-    map: map,
-    suppressMarkers: false,
-    polylineOptions: {
-      strokeColor: '#22c55e',
-      strokeWeight: 5
-    }
-  });
-
   return map;
 }
 
 /**
- * Calcula y muestra una ruta entre dos puntos
+ * Calcula y muestra una ruta entre dos puntos usando OSRM (gratis)
  */
 async function calculateRoute(origin, destination, mapId = 'routeMap') {
   const map = maps[mapId];
-  if (!map || !directionsService || !directionsRenderer) {
-    console.error('Map or directions service not initialized');
+  if (!map) {
+    console.error('Map not initialized');
     return null;
   }
 
-  return new Promise((resolve, reject) => {
-    directionsService.route({
-      origin: origin,
-      destination: destination,
-      travelMode: google.maps.TravelMode.WALKING,
-      provideRouteAlternatives: true
-    }, (response, status) => {
-      if (status === 'OK') {
-        directionsRenderer.setDirections(response);
-        resolve(response);
-      } else {
-        console.error('Directions request failed:', status);
-        reject(status);
-      }
-    });
-  });
+  // Remover ruta anterior si existe
+  if (routingControl) {
+    map.removeLayer(routingControl);
+  }
+
+  // Obtener coordenadas si son strings
+  let originCoords = origin;
+  let destCoords = destination;
+
+  if (typeof origin === 'string') {
+    originCoords = await geocodeAddress(origin);
+  }
+  if (typeof destination === 'string') {
+    destCoords = await geocodeAddress(destination);
+  }
+
+  const startLat = originCoords.lat || originCoords[0];
+  const startLng = originCoords.lng || originCoords[1];
+  const endLat = destCoords.lat || destCoords[0];
+  const endLng = destCoords.lng || destCoords[1];
+
+  // Usar OSRM API para obtener la ruta (gratis y sin API key)
+  const url = `https://router.project-osrm.org/route/v1/foot/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson&steps=true`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.code === 'Ok' && data.routes.length > 0) {
+      const route = data.routes[0];
+      
+      // Limpiar marcadores anteriores de ruta
+      clearRouteMarkers();
+
+      // Dibujar la ruta
+      const routeCoords = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+      const routeLine = L.polyline(routeCoords, {
+        color: '#22c55e',
+        weight: 5,
+        opacity: 0.8
+      }).addTo(map);
+
+      // Marcador de inicio
+      const startMarker = L.marker([startLat, startLng], {
+        icon: L.divIcon({
+          className: 'custom-marker',
+          html: '<div style="background: #22c55e; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        })
+      }).addTo(map).bindPopup('Inicio');
+
+      // Marcador de fin
+      const endMarker = L.marker([endLat, endLng], {
+        icon: L.divIcon({
+          className: 'custom-marker',
+          html: '<div style="background: #ef4444; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        })
+      }).addTo(map).bindPopup('Destino');
+
+      // Guardar para limpiar después
+      markers.push(startMarker, endMarker);
+      routingControl = routeLine;
+
+      // Ajustar vista al bounds de la ruta
+      map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+
+      // Convertir pasos a formato compatible
+      const steps = route.legs[0].steps.map(step => ({
+        instructions: step.maneuver.type + ' ' + (step.name || ''),
+        distance: { text: (step.distance / 1000).toFixed(2) + ' km' }
+      }));
+
+      return {
+        routes: [{
+          legs: [{
+            duration: { text: Math.round(route.duration / 60) + ' min' },
+            distance: { text: (route.distance / 1000).toFixed(2) + ' km' },
+            steps: steps
+          }]
+        }]
+      };
+    }
+  } catch (error) {
+    console.error('Error calculating route:', error);
+    throw error;
+  }
+}
+
+/**
+ * Limpia marcadores de ruta
+ */
+function clearRouteMarkers() {
+  if (routingControl) {
+    const map = Object.values(maps)[0];
+    if (map) {
+      map.removeLayer(routingControl);
+    }
+    routingControl = null;
+  }
 }
 
 /**
@@ -210,15 +279,18 @@ async function loadHelpPoints(map, filter = 'all') {
     // Limpiar marcadores anteriores
     clearMarkers();
 
-    // Intentar cargar desde la API
-    const response = await api.get('/help-points').catch(() => null);
-    
     let points = [];
     
-    if (response && response.success && response.data) {
-      points = response.data.helpPoints || response.data;
-    } else {
-      // Datos de demostración
+    try {
+      const response = await api.get('/help-points');
+      if (response && response.success && response.data) {
+        points = response.data.helpPoints || response.data;
+      }
+    } catch (e) {
+      points = getDemoHelpPoints();
+    }
+
+    if (points.length === 0) {
       points = getDemoHelpPoints();
     }
 
@@ -234,7 +306,6 @@ async function loadHelpPoints(map, filter = 'all') {
 
   } catch (error) {
     console.error('Error loading help points:', error);
-    // Cargar datos demo
     const demoPoints = getDemoHelpPoints();
     demoPoints.forEach(point => addHelpPointMarker(map, point));
   }
@@ -269,34 +340,23 @@ function addHelpPointMarker(map, point) {
 
   const config = icons[point.type] || icons[point.pointType] || { color: '#6b7280', icon: '📍' };
 
-  const marker = new google.maps.Marker({
-    position: { lat: point.lat || point.latitude, lng: point.lng || point.longitude },
-    map: map,
-    title: point.name,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: config.color,
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeWeight: 2,
-      scale: 12
-    }
-  });
+  const marker = L.marker([point.lat || point.latitude, point.lng || point.longitude], {
+    icon: L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background: ${config.color}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px;">${config.icon}</div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
+    })
+  }).addTo(map);
 
-  // Info window
-  const infoWindow = new google.maps.InfoWindow({
-    content: `
-      <div style="padding: 8px; max-width: 200px;">
-        <h3 style="font-weight: bold; margin-bottom: 4px;">${point.name}</h3>
-        <p style="color: #666; font-size: 12px; margin-bottom: 4px;">${point.address}</p>
-        ${point.phone ? `<p style="color: #3b82f6; font-size: 12px;">📞 ${point.phone}</p>` : ''}
-      </div>
-    `
-  });
-
-  marker.addListener('click', () => {
-    infoWindow.open(map, marker);
-  });
+  // Popup
+  marker.bindPopup(`
+    <div style="padding: 8px; max-width: 200px;">
+      <h3 style="font-weight: bold; margin-bottom: 4px;">${point.name}</h3>
+      <p style="color: #666; font-size: 12px; margin-bottom: 4px;">${point.address}</p>
+      ${point.phone ? `<p style="color: #3b82f6; font-size: 12px;">📞 ${point.phone}</p>` : ''}
+    </div>
+  `);
 
   markers.push(marker);
   return marker;
@@ -306,7 +366,12 @@ function addHelpPointMarker(map, point) {
  * Limpia todos los marcadores del mapa
  */
 function clearMarkers() {
-  markers.forEach(marker => marker.setMap(null));
+  markers.forEach(marker => {
+    const map = Object.values(maps)[0];
+    if (map && marker) {
+      map.removeLayer(marker);
+    }
+  });
   markers = [];
 }
 
@@ -322,36 +387,25 @@ function addReportMarker(map, report) {
 
   const color = severityColors[report.severity] || '#6b7280';
 
-  const marker = new google.maps.Marker({
-    position: { 
-      lat: report.latitude || report.location?.latitude, 
-      lng: report.longitude || report.location?.longitude 
-    },
-    map: map,
-    title: report.incidentType || report.type,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: color,
-      fillOpacity: 0.8,
-      strokeColor: '#ffffff',
-      strokeWeight: 2,
-      scale: 10
-    }
-  });
+  const marker = L.marker([
+    report.latitude || report.location?.latitude,
+    report.longitude || report.location?.longitude
+  ], {
+    icon: L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
+    })
+  }).addTo(map);
 
-  const infoWindow = new google.maps.InfoWindow({
-    content: `
-      <div style="padding: 8px; max-width: 250px;">
-        <h3 style="font-weight: bold; margin-bottom: 4px;">${report.incidentType || report.type}</h3>
-        <p style="color: #666; font-size: 12px; margin-bottom: 4px;">${report.description || ''}</p>
-        <p style="color: #999; font-size: 11px;">${report.address || report.location?.address || ''}</p>
-      </div>
-    `
-  });
-
-  marker.addListener('click', () => {
-    infoWindow.open(map, marker);
-  });
+  marker.bindPopup(`
+    <div style="padding: 8px; max-width: 250px;">
+      <h3 style="font-weight: bold; margin-bottom: 4px;">${report.incidentType || report.type}</h3>
+      <p style="color: #666; font-size: 12px; margin-bottom: 4px;">${report.description || ''}</p>
+      <p style="color: #999; font-size: 11px;">${report.address || report.location?.address || ''}</p>
+    </div>
+  `);
 
   markers.push(marker);
   return marker;
@@ -367,78 +421,146 @@ function centerOnUserLocation(mapId) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        map.setCenter(userLocation);
-        map.setZoom(15);
+        const userLocation = [position.coords.latitude, position.coords.longitude];
+        map.setView(userLocation, 15);
 
         // Agregar marcador del usuario
-        new google.maps.Marker({
-          position: userLocation,
-          map: map,
-          title: 'Tu ubicación',
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#359dff',
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 3,
-            scale: 10
-          }
-        });
+        const userMarker = L.marker(userLocation, {
+          icon: L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="background: #359dff; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          })
+        }).addTo(map).bindPopup('Tu ubicación');
+
+        markers.push(userMarker);
       },
       (error) => {
         console.error('Error getting location:', error);
-        ui.showError('No se pudo obtener tu ubicación');
+        if (typeof ui !== 'undefined') {
+          ui.showError('No se pudo obtener tu ubicación');
+        }
       }
     );
   } else {
-    ui.showError('Tu navegador no soporta geolocalización');
+    if (typeof ui !== 'undefined') {
+      ui.showError('Tu navegador no soporta geolocalización');
+    }
   }
 }
 
 /**
- * Geocodifica una dirección a coordenadas
+ * Geocodifica una dirección a coordenadas usando Nominatim (gratis)
  */
-function geocodeAddress(address) {
-  return new Promise((resolve, reject) => {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: address + ', Lima, Perú' }, (results, status) => {
-      if (status === 'OK' && results[0]) {
-        resolve({
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-          formatted: results[0].formatted_address
-        });
-      } else {
-        reject(new Error('No se encontró la dirección'));
+async function geocodeAddress(address) {
+  const query = encodeURIComponent(address + ', Lima, Perú');
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'CaminoSeguro/1.0'
       }
     });
-  });
+    const data = await response.json();
+
+    if (data && data.length > 0) {
+      return {
+        lat: parseFloat(data[0].lat),
+        lng: parseFloat(data[0].lon),
+        formatted: data[0].display_name
+      };
+    }
+    throw new Error('No se encontró la dirección');
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    throw error;
+  }
 }
 
 /**
- * Configura el autocomplete para un input
+ * Configura el autocomplete para un input (usando Nominatim)
  */
 function setupAutocomplete(inputId, onPlaceChanged) {
   const input = document.getElementById(inputId);
   if (!input) return null;
 
-  const autocomplete = new google.maps.places.Autocomplete(input, {
-    componentRestrictions: { country: 'pe' },
-    fields: ['place_id', 'geometry', 'formatted_address', 'name']
+  let debounceTimer;
+  let dropdown = null;
+
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const query = input.value;
+
+    if (query.length < 3) {
+      if (dropdown) dropdown.remove();
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Lima, Perú')}&limit=5`;
+        const response = await fetch(url, {
+          headers: { 'User-Agent': 'CaminoSeguro/1.0' }
+        });
+        const results = await response.json();
+
+        // Crear dropdown
+        if (dropdown) dropdown.remove();
+        
+        if (results.length > 0) {
+          dropdown = document.createElement('div');
+          dropdown.className = 'autocomplete-dropdown';
+          dropdown.style.cssText = 'position: absolute; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 200px; overflow-y: auto; z-index: 1000; width: 100%;';
+          
+          results.forEach(result => {
+            const item = document.createElement('div');
+            item.style.cssText = 'padding: 10px 12px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #f3f4f6;';
+            item.textContent = result.display_name.substring(0, 60) + (result.display_name.length > 60 ? '...' : '');
+            
+            item.addEventListener('mouseenter', () => item.style.background = '#f3f4f6');
+            item.addEventListener('mouseleave', () => item.style.background = 'white');
+            
+            item.addEventListener('click', () => {
+              input.value = result.display_name.split(',')[0];
+              dropdown.remove();
+              dropdown = null;
+              
+              if (onPlaceChanged) {
+                onPlaceChanged({
+                  geometry: {
+                    location: {
+                      lat: () => parseFloat(result.lat),
+                      lng: () => parseFloat(result.lon)
+                    }
+                  },
+                  formatted_address: result.display_name
+                });
+              }
+            });
+            
+            dropdown.appendChild(item);
+          });
+
+          input.parentNode.style.position = 'relative';
+          input.parentNode.appendChild(dropdown);
+        }
+      } catch (error) {
+        console.error('Autocomplete error:', error);
+      }
+    }, 300);
   });
 
-  if (onPlaceChanged) {
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      onPlaceChanged(place);
-    });
-  }
+  // Cerrar dropdown al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (dropdown && !input.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.remove();
+      dropdown = null;
+    }
+  });
 
-  return autocomplete;
+  return { input };
 }
 
 // Exportar funciones globales
