@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Autoridades - CaminoSeguro</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z' fill='%230d59f2'/%3E%3C/svg%3E">
+    <style>
+      .select-arrow {
+        background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(69,116,161)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');
+        background-position: right 1rem center;
+        background-repeat: no-repeat;
+        appearance: none;
+      }
+    </style>
+</head>
+<body>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e6edf4] px-10 py-3">
+          <a href="../index.html" class="flex items-center gap-2 text-[#0c151d]">
+            <img src="../imagenes/logoconnombre.jpeg" alt="CaminoSeguro" class="h-10 object-contain">
+          </a>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#0c151d] text-sm font-medium leading-normal" href="../index.html">Inicio</a>
+              <a class="text-[#0c151d] text-sm font-medium leading-normal" href="registro.html">Registro Usuario</a>
+            </div>
+            <a href="login-autoridad.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e6edf4] text-[#0c151d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#ced7e8] transition-colors">
+              <span class="truncate">Iniciar Sesión</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Register Form -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 flex-1">
+            <h2 class="text-[#0c151d] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Registro de Autoridades</h2>
+            
+            <form id="registerForm" class="flex flex-col">
+              <div id="errorContainer"></div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Nombre completo</p>
+                  <input
+                    type="text"
+                    id="fullName"
+                    placeholder="Ingrese su nombre completo"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Correo electrónico institucional</p>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Ingrese su correo electrónico institucional"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Teléfono</p>
+                  <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Ingrese su teléfono"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Contraseña</p>
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="Cree una contraseña"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Número de identificación institucional</p>
+                  <input
+                    type="text"
+                    id="badgeNumber"
+                    placeholder="Ingrese su número de identificación"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0c151d] text-base font-medium leading-normal pb-2">Institución</p>
+                  <select
+                    id="institution"
+                    required
+                    class="select-arrow form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0c151d] focus:outline-0 focus:ring-0 border-none bg-[#e6edf4] focus:border-none h-14 placeholder:text-[#4574a1] p-4 text-base font-normal leading-normal"
+                  >
+                    <option value="">Seleccione su institución</option>
+                    <option value="policia">Policía Nacional del Perú</option>
+                    <option value="serenazgo">Serenazgo Municipal</option>
+                    <option value="bomberos">Cuerpo de Bomberos</option>
+                    <option value="defensa_civil">Defensa Civil</option>
+                    <option value="municipalidad">Municipalidad</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </label>
+              </div>
+              
+              <div class="flex px-4 py-3">
+                <button
+                  type="submit"
+                  id="registerBtn"
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 flex-1 bg-[#359dff] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#2080dd] transition-colors"
+                >
+                  <span class="truncate">Registrarse</span>
+                </button>
+              </div>
+
+              <p class="text-[#4574a1] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
+                ¿Ya tienes una cuenta? <a href="login-autoridad.html" class="underline hover:text-[#0c151d]">Inicia sesión</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+      // Redirect if already logged in
+      auth.redirectIfLoggedIn();
+
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password').value;
+        const badgeNumber = document.getElementById('badgeNumber').value;
+        const institution = document.getElementById('institution').value;
+        const registerBtn = document.getElementById('registerBtn');
+        const errorContainer = document.getElementById('errorContainer');
+        
+        // Clear previous errors
+        errorContainer.innerHTML = '';
+        
+        // Validate
+        if (!validate.required(fullName)) {
+          ui.showError('El nombre completo es requerido', errorContainer);
+          return;
+        }
+        
+        if (!validate.email(email)) {
+          ui.showError('Por favor ingresa un email válido', errorContainer);
+          return;
+        }
+        
+        if (!validate.password(password)) {
+          ui.showError('La contraseña debe tener al menos 6 caracteres', errorContainer);
+          return;
+        }
+
+        if (!validate.required(badgeNumber)) {
+          ui.showError('El número de identificación es requerido', errorContainer);
+          return;
+        }
+
+        if (!validate.required(institution)) {
+          ui.showError('Debe seleccionar una institución', errorContainer);
+          return;
+        }
+        
+        ui.showLoading(registerBtn);
+        
+        try {
+          const response = await api.post('/auth/register-authority', { 
+            fullName, 
+            email, 
+            password,
+            phone: phone || undefined,
+            badgeNumber,
+            institution
+          });
+          
+          if (response.success) {
+            auth.saveAuth(response.data.token, response.data.user);
+            window.location.href = 'dashboard.html';
+          }
+        } catch (error) {
+          ui.showError(error.message || 'Error al registrar', errorContainer);
+        } finally {
+          ui.hideLoading(registerBtn);
+        }
+      });
+    </script>
+</body>
+</html>

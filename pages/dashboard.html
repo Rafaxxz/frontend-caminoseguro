@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CaminoSeguro</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z' fill='%230d59f2'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e6edf4] px-10 py-3">
+          <a href="../index.html" class="flex items-center gap-2 text-[#0c151d]">
+            <img src="../imagenes/logoconnombre.jpeg" alt="CaminoSeguro" class="h-10 object-contain">
+          </a>
+          <div class="flex items-center gap-4">
+            <span id="userName" class="text-[#4574a1] text-sm"></span>
+            <button onclick="auth.logout()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e6edf4] text-[#0c151d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#ced7e8] transition-colors">
+              <span class="truncate">Cerrar Sesión</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="flex flex-1">
+          <!-- Sidebar -->
+          <nav class="w-64 bg-white border-r border-[#e6edf4] p-4">
+            <ul class="space-y-2">
+              <li>
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#e6edf4] text-[#0c151d] font-medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a href="reportes.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                  Reportes
+                </a>
+              </li>
+              <li>
+                <a href="rutas-seguras.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M200,224H150.54A266.56,266.56,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25a88,88,0,0,0-176,0c0,31.4,14.51,64.68,42,96.25A266.56,266.56,0,0,0,105.46,224H56a8,8,0,0,0,0,16H200a8,8,0,0,0,0-16ZM56,104a72,72,0,0,1,144,0c0,57.23-55.47,105-72,118C111.47,209,56,161.23,56,104Zm112,0a40,40,0,1,0-40,40A40,40,0,0,0,168,104Zm-64,0a24,24,0,1,1,24,24A24,24,0,0,1,104,104Z"/></svg>
+                  Rutas Seguras
+                </a>
+              </li>
+              <li>
+                <a href="mapas-calor.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg>
+                  Mapas de Calor
+                </a>
+              </li>
+              <li>
+                <a href="puntos-ayuda.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>
+                  Puntos de Ayuda
+                </a>
+              </li>
+              <li>
+                <a href="educacion.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></svg>
+                  Educación Preventiva
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Main Content -->
+          <main class="flex-1 p-8">
+            <h1 class="text-[#0c151d] text-2xl font-bold mb-6">Panel de Control</h1>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e6edf4]">
+                <div class="flex items-center gap-4">
+                  <div class="bg-[#e6edf4] p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#4574a1" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-[#4574a1] text-sm">Reportes Activos</p>
+                    <p id="activeReports" class="text-[#0c151d] text-2xl font-bold">--</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e6edf4]">
+                <div class="flex items-center gap-4">
+                  <div class="bg-[#dcfce7] p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#22c55e" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-[#4574a1] text-sm">Resueltos Hoy</p>
+                    <p id="resolvedToday" class="text-[#0c151d] text-2xl font-bold">--</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e6edf4]">
+                <div class="flex items-center gap-4">
+                  <div class="bg-[#fef3c7] p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#f59e0b" viewBox="0 0 256 256"><path d="M200,224H150.54A266.56,266.56,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25a88,88,0,0,0-176,0c0,31.4,14.51,64.68,42,96.25A266.56,266.56,0,0,0,105.46,224H56a8,8,0,0,0,0,16H200a8,8,0,0,0,0-16ZM56,104a72,72,0,0,1,144,0c0,57.23-55.47,105-72,118C111.47,209,56,161.23,56,104Z"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-[#4574a1] text-sm">Zonas de Riesgo</p>
+                    <p id="riskZones" class="text-[#0c151d] text-2xl font-bold">--</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e6edf4]">
+                <div class="flex items-center gap-4">
+                  <div class="bg-[#e0e7ff] p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6366f1" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-[#4574a1] text-sm">Usuarios Activos</p>
+                    <p id="activeUsers" class="text-[#0c151d] text-2xl font-bold">--</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Recent Alerts -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#e6edf4]">
+              <div class="p-6 border-b border-[#e6edf4]">
+                <div class="flex items-center justify-between">
+                  <h2 class="text-[#0c151d] text-lg font-bold">Alertas Recientes</h2>
+                  <a href="reportes.html" class="text-[#359dff] text-sm font-medium hover:underline">Ver todas</a>
+                </div>
+              </div>
+              <div id="alertsList" class="p-6">
+                <div class="flex items-center justify-center py-8 text-[#4574a1]">
+                  <svg class="animate-spin h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Cargando alertas...
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+      // Require authentication
+      auth.requireAuth();
+      
+      // Display user name
+      const user = auth.getUser();
+      if (user) {
+        document.getElementById('userName').textContent = `Hola, ${user.fullName || user.email}`;
+      }
+      
+      // Load dashboard data
+      async function loadDashboard() {
+        try {
+          // Try to get stats from API
+          const stats = await api.get('/stats').catch(() => null);
+          
+          if (stats && stats.success && stats.data) {
+            const data = stats.data;
+            document.getElementById('activeReports').textContent = data.reports?.total || data.reports?.last24h || 0;
+            document.getElementById('resolvedToday').textContent = data.reports?.byStatus?.resolved || 0;
+            document.getElementById('riskZones').textContent = data.zones?.highRisk || 0;
+            document.getElementById('activeUsers').textContent = data.users?.total || 0;
+          } else {
+            // Show placeholder data
+            document.getElementById('activeReports').textContent = '12';
+            document.getElementById('resolvedToday').textContent = '5';
+            document.getElementById('riskZones').textContent = '8';
+            document.getElementById('activeUsers').textContent = '156';
+          }
+          
+          // Load alerts
+          const alertsResponse = await api.get('/reports?limit=5').catch(() => null);
+          const alertsList = document.getElementById('alertsList');
+          const reports = alertsResponse?.data?.reports || [];
+          
+          if (alertsResponse && alertsResponse.success && reports.length > 0) {
+            alertsList.innerHTML = reports.map(alert => `
+              <div class="flex items-center gap-4 py-4 border-b border-[#e6edf4] last:border-0">
+                <div class="bg-[#fee2e2] p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ef4444" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-[#0c151d] font-medium">${alert.incidentType || 'Incidente'}</p>
+                  <p class="text-[#4574a1] text-sm">${alert.location?.address || 'Ubicación no especificada'}</p>
+                </div>
+                <span class="text-[#4574a1] text-xs">${formatTimeAgo(alert.createdAt)}</span>
+              </div>
+            `).join('');
+          } else {
+            // Show demo alerts
+            alertsList.innerHTML = `
+              <div class="flex items-center gap-4 py-4 border-b border-[#e6edf4]">
+                <div class="bg-[#fee2e2] p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ef4444" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-[#0c151d] font-medium">Robo reportado</p>
+                  <p class="text-[#4574a1] text-sm">Av. Universitaria 1801, Lima</p>
+                </div>
+                <span class="text-[#4574a1] text-xs">Hace 5 min</span>
+              </div>
+              <div class="flex items-center gap-4 py-4 border-b border-[#e6edf4]">
+                <div class="bg-[#fef3c7] p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f59e0b" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-[#0c151d] font-medium">Zona peligrosa identificada</p>
+                  <p class="text-[#4574a1] text-sm">Parque Kennedy, Miraflores</p>
+                </div>
+                <span class="text-[#4574a1] text-xs">Hace 15 min</span>
+              </div>
+              <div class="flex items-center gap-4 py-4">
+                <div class="bg-[#dcfce7] p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#22c55e" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-[#0c151d] font-medium">Incidente resuelto</p>
+                  <p class="text-[#4574a1] text-sm">Jr. de la Unión 512, Centro de Lima</p>
+                </div>
+                <span class="text-[#4574a1] text-xs">Hace 30 min</span>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error('Error loading dashboard:', error);
+        }
+      }
+      
+      function formatTimeAgo(dateString) {
+        if (!dateString) return 'Hace un momento';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        
+        if (diffMins < 1) return 'Hace un momento';
+        if (diffMins < 60) return `Hace ${diffMins} min`;
+        const diffHours = Math.floor(diffMins / 60);
+        if (diffHours < 24) return `Hace ${diffHours}h`;
+        const diffDays = Math.floor(diffHours / 24);
+        return `Hace ${diffDays}d`;
+      }
+      
+      loadDashboard();
+    </script>
+</body>
+</html>

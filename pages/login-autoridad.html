@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Autoridades - CaminoSeguro</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z' fill='%230d59f2'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-[#f8f9fc] group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7ebf4] px-10 py-3">
+          <a href="../index.html" class="flex items-center gap-2 text-[#0d121c]">
+            <img src="../imagenes/logoconnombre.jpeg" alt="CaminoSeguro" class="h-10 object-contain">
+          </a>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#0d121c] text-sm font-medium leading-normal" href="../index.html">Inicio</a>
+              <a class="text-[#0d121c] text-sm font-medium leading-normal" href="login.html">Login Usuario</a>
+            </div>
+            <a href="registro-autoridad.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e7ebf4] text-[#0d121c] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#ced7e8] transition-colors">
+              <span class="truncate">Regístrate</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Login Form -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 flex-1">
+            <h2 class="text-[#0d121c] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Iniciar sesión como Autoridad</h2>
+            
+            <form id="loginForm" class="flex flex-col">
+              <div id="errorContainer"></div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0d121c] text-base font-medium leading-normal pb-2">Correo electrónico</p>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="usuario@autoridad.com"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d121c] focus:outline-0 focus:ring-0 border border-[#ced7e8] bg-[#f8f9fc] focus:border-[#ced7e8] h-14 placeholder:text-[#49659c] p-[15px] text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#0d121c] text-base font-medium leading-normal pb-2">Contraseña</p>
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="Ingresa tu contraseña"
+                    required
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d121c] focus:outline-0 focus:ring-0 border border-[#ced7e8] bg-[#f8f9fc] focus:border-[#ced7e8] h-14 placeholder:text-[#49659c] p-[15px] text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              
+              <p class="text-[#49659c] text-sm font-normal leading-normal pb-3 pt-1 px-4 underline cursor-pointer hover:text-[#0d121c]">¿Olvidaste tu contraseña?</p>
+              
+              <div class="flex px-4 py-3">
+                <button
+                  type="submit"
+                  id="loginBtn"
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 flex-1 bg-[#0d59f2] text-[#f8f9fc] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#0a47c2] transition-colors"
+                >
+                  <span class="truncate">Acceder</span>
+                </button>
+              </div>
+              
+              <p class="text-[#49659c] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
+                ¿No tienes una cuenta? <a href="registro-autoridad.html" class="underline hover:text-[#0d121c]">Regístrate</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+      // Redirect if already logged in
+      auth.redirectIfLoggedIn();
+
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const loginBtn = document.getElementById('loginBtn');
+        const errorContainer = document.getElementById('errorContainer');
+        
+        // Clear previous errors
+        errorContainer.innerHTML = '';
+        
+        // Validate
+        if (!validate.email(email)) {
+          ui.showError('Por favor ingresa un email válido', errorContainer);
+          return;
+        }
+        
+        if (!validate.password(password)) {
+          ui.showError('La contraseña debe tener al menos 6 caracteres', errorContainer);
+          return;
+        }
+        
+        ui.showLoading(loginBtn);
+        
+        try {
+          const response = await api.post('/auth/login', { email, password });
+          
+          if (response.success) {
+            // Verify it's an authority account
+            if (response.data.user.userType !== 'authority' && response.data.user.userType !== 'admin') {
+              ui.showError('Esta cuenta no es de autoridad. Usa el login de usuarios.', errorContainer);
+              return;
+            }
+            
+            auth.saveAuth(response.data.token, response.data.user);
+            window.location.href = 'dashboard.html';
+          }
+        } catch (error) {
+          ui.showError(error.message || 'Error al iniciar sesión', errorContainer);
+        } finally {
+          ui.hideLoading(loginBtn);
+        }
+      });
+    </script>
+</body>
+</html>

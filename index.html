@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaminoSeguro - Tu seguridad en el camino</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z' fill='%2332c705'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-[#f9fcf8] group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#eaf4e6] px-10 py-3">
+          <div class="flex items-center gap-2 text-[#101c0d]">
+            <img src="imagenes/logoconnombre.jpeg" alt="CaminoSeguro" class="h-10 object-contain">
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#101c0d] text-sm font-medium leading-normal hover:text-[#32c705] transition-colors" href="#">Inicio</a>
+              <a class="text-[#101c0d] text-sm font-medium leading-normal hover:text-[#32c705] transition-colors" href="#servicios">Servicios</a>
+              <a class="text-[#101c0d] text-sm font-medium leading-normal hover:text-[#32c705] transition-colors" href="#nosotros">Nosotros</a>
+              <a class="text-[#101c0d] text-sm font-medium leading-normal hover:text-[#32c705] transition-colors" href="#contacto">Contacto</a>
+            </div>
+            <div class="flex gap-2">
+              <a href="pages/login.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#eaf4e6] text-[#101c0d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d4e9ce] transition-colors">
+                <span class="truncate">Iniciar Sesión</span>
+              </a>
+              <a href="pages/registro.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#32c705] text-[#101c0d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#2ab004] transition-colors">
+                <span class="truncate">Registrarse</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-lg items-start justify-end px-4 pb-10 @[480px]:px-10"
+                  style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdjN31kIt8-GmHFFFkIU2RFBT_PrJloQw-hwgf4gVst6rMcvOj8Hd8iJrSpngwc5o1HzQCV6vV_HcPCUIh2i0Cgwry57Joshib3YyNAJ7n08NBXR88clDKJU3sd-QSdt5DgiEgu1AD9zu9LJii8UPK3GCACFS33wC3Wqxyn5Bok7XatEFR6jkzOd5jaRg8q85Ryq715WG4FSkyxls22Rdcud9wb-w-QyXKljb8H67x8fXSEDYZcUsJnv-hFQcFVJWndcvxx3q0OvU");'>
+                  <div class="flex flex-col gap-2 text-left">
+                    <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                      Tu seguridad en el camino, nuestra prioridad
+                    </h1>
+                    <h2 class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                      Anticipa peligros y viaja con confianza con CaminoSeguro. Descubre cómo nuestra app te protege en cada viaje.
+                    </h2>
+                  </div>
+                  <a href="pages/registro.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#32c705] text-[#101c0d] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-[#2ab004] transition-colors">
+                    <span class="truncate">Comenzar Ahora</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Objetivos -->
+            <h2 id="nosotros" class="text-[#101c0d] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Nuestros objetivos</h2>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M208,40H48A16,16,0,0,0,32,56v58.78c0,89.61,75.82,119.34,91,124.39a15.53,15.53,0,0,0,10,0c15.2-5.05,91-34.78,91-124.39V56A16,16,0,0,0,208,40Zm0,74.79c0,78.42-66.35,104.62-80,109.18-13.53-4.51-80-30.69-80-109.18V56H208ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.68l50.34-50.34a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Seguridad vial mejorada</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Reducir accidentes y mejorar la seguridad de conductores y peatones.</p>
+                </div>
+              </div>
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Cobertura nacional</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Ofrecer protección en todas las carreteras del país.</p>
+                </div>
+              </div>
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Comunidad de usuarios</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Crear una red de usuarios que comparten información en tiempo real.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Funcionalidades -->
+            <h2 id="servicios" class="text-[#101c0d] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Funcionalidades clave</h2>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Alertas de peligro en tiempo real</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Recibe notificaciones sobre accidentes, obras y otros peligros en tu ruta.</p>
+                </div>
+              </div>
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M235.92,199A8,8,0,0,1,225,195.92L155.32,72H136v8a8,8,0,0,1-16,0V72H100.68L31,195.92A8,8,0,0,1,17,188.08L82.32,72H24a8,8,0,0,1,0-16H232a8,8,0,0,1,0,16H173.68L239,188.08A8,8,0,0,1,235.92,199ZM128,112a8,8,0,0,0-8,8v16a8,8,0,0,0,16,0V120A8,8,0,0,0,128,112Zm0,56a8,8,0,0,0-8,8v16a8,8,0,0,0,16,0V176A8,8,0,0,0,128,168Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Navegación segura</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Planifica tus viajes con rutas optimizadas y seguras.</p>
+                </div>
+              </div>
+              <div class="flex flex-1 gap-3 rounded-lg border border-[#d4e9ce] bg-[#f9fcf8] p-4 flex-col hover:shadow-lg transition-shadow">
+                <div class="text-[#101c0d]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M229.33,98.21,53.41,33l-.16-.05A16,16,0,0,0,32.9,53.25a1,1,0,0,0,.05.16L98.21,229.33A15.77,15.77,0,0,0,113.28,240h.3a15.77,15.77,0,0,0,15-11.29l23.56-76.56,76.56-23.56a16,16,0,0,0,.62-30.38ZM224,113.3l-76.56,23.56a16,16,0,0,0-10.58,10.58L113.3,224h0l-.06-.17L48,48l175.82,65.22.16.06Z"></path>
+                  </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h2 class="text-[#101c0d] text-base font-bold leading-tight">Mapas de calor</h2>
+                  <p class="text-[#5b9e47] text-sm font-normal leading-normal">Visualiza las zonas de mayor riesgo en la ciudad.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA Final -->
+            <div id="contacto" class="@container">
+              <div class="flex flex-col justify-end gap-6 px-4 py-10 @[480px]:gap-8 @[480px]:px-10 @[480px]:py-20">
+                <div class="flex flex-col gap-2 text-center">
+                  <h1 class="text-[#101c0d] tracking-light text-[32px] font-bold leading-tight @[480px]:text-4xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] max-w-[720px] mx-auto">
+                    ¿Listo para viajar con seguridad?
+                  </h1>
+                  <p class="text-[#5b9e47] text-base font-normal leading-normal max-w-[720px] mx-auto">
+                    Únete a miles de usuarios que ya confían en CaminoSeguro para proteger sus viajes.
+                  </p>
+                </div>
+                <div class="flex flex-1 justify-center">
+                  <div class="flex justify-center gap-3">
+                    <a href="pages/registro.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#32c705] text-[#101c0d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#2ab004] transition-colors">
+                      <span class="truncate">Crear Cuenta Gratis</span>
+                    </a>
+                    <a href="pages/login-autoridad.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#eaf4e6] text-[#101c0d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d4e9ce] transition-colors">
+                      <span class="truncate">Soy Autoridad</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-t border-[#eaf4e6] px-10 py-6">
+          <div class="flex justify-between items-center">
+            <p class="text-[#5b9e47] text-sm">© 2024 CaminoSeguro. Todos los derechos reservados.</p>
+            <div class="flex gap-4">
+              <a href="#" class="text-[#5b9e47] text-sm hover:text-[#101c0d]">Términos</a>
+              <a href="#" class="text-[#5b9e47] text-sm hover:text-[#101c0d]">Privacidad</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+</body>
+</html>
