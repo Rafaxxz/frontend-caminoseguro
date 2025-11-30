@@ -235,11 +235,12 @@
       // Aprobar reporte
       async function approveReport(uuid) {
         try {
-          const response = await api.put(`/reports/${uuid}/status`, { status: 'verified' });
+          const response = await api.put(`/reports/${uuid}/status`, { status: 'confirmed' });
           if (response.success) {
             document.getElementById(`report-${uuid}`).remove();
             alert('✅ Reporte aprobado exitosamente');
             loadDashboard();
+            loadPendingReports();
           }
         } catch (error) {
           alert('Error al aprobar el reporte: ' + error.message);
@@ -257,6 +258,7 @@
             document.getElementById(`report-${uuid}`).remove();
             alert('❌ Reporte rechazado');
             loadDashboard();
+            loadPendingReports();
           }
         } catch (error) {
           alert('Error al rechazar el reporte: ' + error.message);
