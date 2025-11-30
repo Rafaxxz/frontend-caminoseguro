@@ -196,46 +196,82 @@
         }
       }
 
-      // Datos de patrullajes (simulados, en producción vendrían del backend)
-      let patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [
-        {
-          id: 1,
-          nombre: 'Patrullaje Centro',
-          tipo: 'Rutinario',
-          recursos: ['Vehículo 2', 'Oficial 3', 'Oficial 4'],
-          fecha: '2024-03-14T14:00',
-          duracion: 2,
-          estado: 'en_curso',
-          lat: -12.0464,
-          lng: -77.0428
-        },
-        {
-          id: 2,
-          nombre: 'Patrullaje Sur',
-          tipo: 'Especial',
-          recursos: ['Vehículo 3', 'Oficial 5', 'Oficial 6'],
-          fecha: '2024-03-14T18:00',
-          duracion: 2,
-          estado: 'completado',
-          lat: -12.1191,
-          lng: -77.0311
-        },
-        {
-          id: 3,
-          nombre: 'Patrullaje Este',
-          tipo: 'Rutinario',
-          recursos: ['Vehículo 1', 'Oficial 1', 'Oficial 2'],
-          fecha: '2024-03-15T08:00',
-          duracion: 2,
-          estado: 'programado',
-          lat: -12.0789,
-          lng: -76.9714
-        }
-      ];
+      // Datos de patrullajes (se cargarán desde la API)
+      let patrullajes = [];
 
       let currentTab = 'activos';
       let patrolMap = null;
       let patrolMarkers = [];
+
+      const API_URL = 'https://caminoseguro-api.onrender.com/api';
+
+      // Cargar patrullajes desde la API
+      async function loadPatrols() {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_URL}/patrols`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            patrullajes = data.data.patrols.map(p => ({
+              id: p.id,
+              uuid: p.uuid,
+              nombre: p.name,
+              tipo: capitalizeFirst(p.patrolType),
+              recursos: Array.isArray(p.resources) ? p.resources : JSON.parse(p.resources || '[]'),
+              fecha: p.scheduledAt,
+              duracion: p.duration,
+              estado: mapStatusFromAPI(p.status),
+              lat: parseFloat(p.latitude) || -12.0464,
+              lng: parseFloat(p.longitude) || -77.0428
+            }));
+            renderPatrols();
+            updateMapMarkers();
+          } else {
+            console.error('Error al cargar patrullajes');
+            // Usar datos locales como fallback
+            patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [];
+            renderPatrols();
+            updateMapMarkers();
+          }
+        } catch (error) {
+          console.error('Error de conexión:', error);
+          // Usar datos locales como fallback
+          patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [];
+          renderPatrols();
+          updateMapMarkers();
+        }
+      }
+
+      // Mapear estado desde API
+      function mapStatusFromAPI(status) {
+        const map = {
+          'scheduled': 'programado',
+          'in_progress': 'en_curso',
+          'completed': 'completado',
+          'cancelled': 'cancelado'
+        };
+        return map[status] || status;
+      }
+
+      // Mapear estado hacia API
+      function mapStatusToAPI(estado) {
+        const map = {
+          'programado': 'scheduled',
+          'en_curso': 'in_progress',
+          'completado': 'completed',
+          'cancelado': 'cancelled'
+        };
+        return map[estado] || estado;
+      }
+
+      function capitalizeFirst(str) {
+        return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+      }
 
       // Inicializar mapa
       function initPatrolMap() {
@@ -243,8 +279,6 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(patrolMap);
-        
-        updateMapMarkers();
       }
 
       // Actualizar marcadores del mapa
@@ -322,7 +356,7 @@
             <td class="px-6 py-4">
               <span class="text-[#359dff] text-sm">${p.tipo}</span>
             </td>
-            <td class="px-6 py-4 text-sm text-[#4574a1]">${p.recursos.join(', ')}</td>
+            <td class="px-6 py-4 text-sm text-[#4574a1]">${Array.isArray(p.recursos) ? p.recursos.join(', ') : p.recursos}</td>
             <td class="px-6 py-4 text-sm text-[#4574a1]">${formatDate(p.fecha)} - ${formatEndTime(p.fecha, p.duracion)}</td>
             <td class="px-6 py-4">
               <span class="px-3 py-1 text-xs font-medium rounded-full ${getEstadoClass(p.estado)}">${getEstadoLabel(p.estado)}</span>
@@ -330,10 +364,10 @@
             <td class="px-6 py-4">
               <div class="flex gap-2">
                 ${p.estado === 'programado' ? `
-                  <button onclick="iniciarPatrullaje(${p.id})" class="text-green-600 hover:text-green-800 text-sm font-medium">Iniciar</button>
+                  <button onclick="iniciarPatrullaje('${p.uuid || p.id}')" class="text-green-600 hover:text-green-800 text-sm font-medium">Iniciar</button>
                 ` : ''}
                 ${p.estado === 'en_curso' ? `
-                  <button onclick="completarPatrullaje(${p.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Completar</button>
+                  <button onclick="completarPatrullaje('${p.uuid || p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Completar</button>
                 ` : ''}
                 <button onclick="verEnMapa(${p.lat}, ${p.lng})" class="text-[#4574a1] hover:text-[#0c151d] text-sm">Ver mapa</button>
               </div>
@@ -375,26 +409,70 @@
       }
 
       // Iniciar patrullaje
-      function iniciarPatrullaje(id) {
-        const patrol = patrullajes.find(p => p.id === id);
-        if (patrol) {
-          patrol.estado = 'en_curso';
-          savePatrols();
-          renderPatrols();
-          updateMapMarkers();
-          alert('✅ Patrullaje iniciado');
+      async function iniciarPatrullaje(uuid) {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_URL}/patrols/${uuid}/status`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: 'in_progress' })
+          });
+          
+          if (response.ok) {
+            await loadPatrols();
+            alert('✅ Patrullaje iniciado');
+          } else {
+            const error = await response.json();
+            alert('Error: ' + (error.message || 'No se pudo iniciar el patrullaje'));
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          // Fallback a localStorage
+          const patrol = patrullajes.find(p => p.uuid === uuid || p.id === uuid);
+          if (patrol) {
+            patrol.estado = 'en_curso';
+            localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
+            renderPatrols();
+            updateMapMarkers();
+            alert('✅ Patrullaje iniciado (modo offline)');
+          }
         }
       }
 
       // Completar patrullaje
-      function completarPatrullaje(id) {
-        const patrol = patrullajes.find(p => p.id === id);
-        if (patrol) {
-          patrol.estado = 'completado';
-          savePatrols();
-          renderPatrols();
-          updateMapMarkers();
-          alert('✅ Patrullaje completado');
+      async function completarPatrullaje(uuid) {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_URL}/patrols/${uuid}/status`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: 'completed' })
+          });
+          
+          if (response.ok) {
+            await loadPatrols();
+            alert('✅ Patrullaje completado');
+          } else {
+            const error = await response.json();
+            alert('Error: ' + (error.message || 'No se pudo completar el patrullaje'));
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          // Fallback a localStorage
+          const patrol = patrullajes.find(p => p.uuid === uuid || p.id === uuid);
+          if (patrol) {
+            patrol.estado = 'completado';
+            localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
+            renderPatrols();
+            updateMapMarkers();
+            alert('✅ Patrullaje completado (modo offline)');
+          }
         }
       }
 
@@ -403,45 +481,70 @@
         patrolMap.setView([lat, lng], 15);
       }
 
-      // Guardar patrullajes
-      function savePatrols() {
-        localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
-      }
-
       // Formulario
-      document.getElementById('patrolForm').addEventListener('submit', (e) => {
+      document.getElementById('patrolForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const name = document.getElementById('patrolName').value;
-        const type = document.getElementById('patrolType');
+        const typeSelect = document.getElementById('patrolType');
+        const patrolType = typeSelect.value;
         const resources = Array.from(document.getElementById('patrolResources').selectedOptions).map(o => o.text);
-        const date = document.getElementById('patrolDate').value;
+        const scheduledAt = document.getElementById('patrolDate').value;
         const duration = parseInt(document.getElementById('patrolDuration').value);
 
-        if (!name || !date || resources.length === 0) {
+        if (!name || !scheduledAt || resources.length === 0) {
           alert('Por favor complete todos los campos');
           return;
         }
 
-        const newPatrol = {
-          id: Date.now(),
-          nombre: name,
-          tipo: type.options[type.selectedIndex].text,
-          recursos: resources,
-          fecha: date,
-          duracion: duration,
-          estado: 'programado',
-          lat: -12.0464 + (Math.random() - 0.5) * 0.1,
-          lng: -77.0428 + (Math.random() - 0.5) * 0.1
-        };
-
-        patrullajes.push(newPatrol);
-        savePatrols();
-        renderPatrols();
-        updateMapMarkers();
-        
-        e.target.reset();
-        alert('✅ Patrullaje programado exitosamente');
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_URL}/patrols`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              name,
+              patrolType,
+              resources,
+              scheduledAt: new Date(scheduledAt).toISOString(),
+              duration,
+              latitude: -12.0464 + (Math.random() - 0.5) * 0.1,
+              longitude: -77.0428 + (Math.random() - 0.5) * 0.1
+            })
+          });
+          
+          if (response.ok) {
+            await loadPatrols();
+            e.target.reset();
+            alert('✅ Patrullaje programado exitosamente');
+          } else {
+            const error = await response.json();
+            alert('Error: ' + (error.message || 'No se pudo crear el patrullaje'));
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          // Fallback a localStorage
+          const newPatrol = {
+            id: Date.now(),
+            nombre: name,
+            tipo: typeSelect.options[typeSelect.selectedIndex].text,
+            recursos: resources,
+            fecha: scheduledAt,
+            duracion: duration,
+            estado: 'programado',
+            lat: -12.0464 + (Math.random() - 0.5) * 0.1,
+            lng: -77.0428 + (Math.random() - 0.5) * 0.1
+          };
+          patrullajes.push(newPatrol);
+          localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
+          renderPatrols();
+          updateMapMarkers();
+          e.target.reset();
+          alert('✅ Patrullaje guardado localmente (sin conexión al servidor)');
+        }
       });
 
       // Búsqueda
@@ -457,7 +560,7 @@
       // Inicializar
       document.addEventListener('DOMContentLoaded', () => {
         initPatrolMap();
-        renderPatrols();
+        loadPatrols(); // Cargar desde API
         
         // Establecer fecha mínima
         const now = new Date();
