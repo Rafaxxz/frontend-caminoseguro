@@ -58,27 +58,39 @@ function initHeatMap(containerId) {
 }
 
 /**
- * Carga datos del heatmap
+ * Carga datos del heatmap desde reportes y zonas de calor
  */
 async function loadHeatmapData(map, filter = 'all', timeRange = '7d') {
   try {
-    // Intentar cargar desde la API
     let heatmapData = [];
     
     try {
-      const response = await api.get(`/heatmap?timeRange=${timeRange}${filter !== 'all' ? `&type=${filter}` : ''}`);
-      if (response && response.success && response.data) {
-        heatmapData = response.data.map(zone => [
+      // Primero intentar cargar las zonas de calor
+      const heatmapResponse = await api.get(`/heatmap`).catch(() => null);
+      if (heatmapResponse && heatmapResponse.success && heatmapResponse.data?.zones) {
+        heatmapData = heatmapResponse.data.zones.map(zone => [
           zone.latitude,
           zone.longitude,
-          zone.intensity || zone.count || 1
+          zone.intensity || 5
         ]);
       }
+      
+      // También cargar los reportes directamente para tener datos más actualizados
+      const reportsResponse = await api.get(`/reports?limit=100${filter !== 'all' ? `&incidentType=${filter}` : ''}`).catch(() => null);
+      if (reportsResponse && reportsResponse.success && reportsResponse.data?.reports) {
+        const reportPoints = reportsResponse.data.reports.map(report => [
+          report.location?.latitude || report.latitude,
+          report.location?.longitude || report.longitude,
+          getSeverityIntensity(report.severity)
+        ]).filter(p => p[0] && p[1]); // Filtrar puntos sin coordenadas
+        
+        heatmapData = [...heatmapData, ...reportPoints];
+      }
     } catch (e) {
-      // Usar datos demo si la API falla
-      heatmapData = getDemoHeatmapData();
+      console.error('Error fetching heatmap data:', e);
     }
 
+    // Si no hay datos, usar datos de demostración
     if (heatmapData.length === 0) {
       heatmapData = getDemoHeatmapData();
     }
@@ -121,6 +133,19 @@ async function loadHeatmapData(map, filter = 'all', timeRange = '7d') {
       }
     }).addTo(map);
   }
+}
+
+/**
+ * Convierte la severidad del reporte a intensidad para el heatmap
+ */
+function getSeverityIntensity(severity) {
+  const intensityMap = {
+    'low': 3,
+    'medium': 6,
+    'high': 9,
+    'critical': 10
+  };
+  return intensityMap[severity] || 5;
 }
 
 /**
