@@ -69,6 +69,11 @@ const api = {
             const data = await response.json();
 
             if (!response.ok) {
+                // Si hay errores de validación, mostrarlos
+                if (data.errors && Array.isArray(data.errors)) {
+                    const errorMessages = data.errors.map(e => e.msg || e.message).join(', ');
+                    throw new Error(errorMessages || data.message || 'Error de validación');
+                }
                 throw new Error(data.message || 'Error en la solicitud');
             }
 
