@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrullajes - CaminoSeguro</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z' fill='%230d59f2'/%3E%3C/svg%3E">
+    <!-- Leaflet CSS y JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e6edf4] px-10 py-3">
+          <a href="../index.html" class="flex items-center gap-2 text-[#0c151d]">
+            <img src="../imagenes/logoconnombre.jpeg" alt="CaminoSeguro" class="h-10 object-contain">
+          </a>
+          <div class="flex items-center gap-4">
+            <span id="userName" class="text-[#4574a1] text-sm"></span>
+            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Autoridad</span>
+            <button onclick="auth.logout()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e6edf4] text-[#0c151d] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#ced7e8] transition-colors">
+              <span class="truncate">Cerrar Sesión</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="flex flex-1">
+          <!-- Sidebar -->
+          <nav class="w-64 bg-white border-r border-[#e6edf4] p-4">
+            <ul class="space-y-2">
+              <li>
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a href="patrullajes.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#e6edf4] text-[#0c151d] font-medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M240,160v24a16,16,0,0,1-16,16H204a24,24,0,0,1-48,0H100a24,24,0,0,1-48,0H32a16,16,0,0,1-16-16V160a8,8,0,0,1,8-8H56V104A40,40,0,0,1,96,64h80V48a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8v16h8a8,8,0,0,1,8,8v64a40,40,0,0,1,0,80V232a8,8,0,0,1-16,0V216a24,24,0,0,1-48,0V160a8,8,0,0,1,8-8Zm-64,48a8,8,0,1,0,8-8A8,8,0,0,0,176,208ZM72,200a8,8,0,1,0,8,8A8,8,0,0,0,72,200Z"/></svg>
+                  Patrullajes
+                </a>
+              </li>
+              <li>
+                <a href="reportes.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                  Reportes
+                </a>
+              </li>
+              <li>
+                <a href="mapas-calor.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg>
+                  Mapas de Calor
+                </a>
+              </li>
+              <li>
+                <a href="puntos-ayuda.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#4574a1] hover:bg-[#e6edf4] transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>
+                  Puntos de Ayuda
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Main Content -->
+          <main class="flex-1 p-8">
+            <div class="flex gap-8">
+              <!-- Formulario de Patrullaje -->
+              <div class="w-80 flex-shrink-0">
+                <div class="bg-white rounded-xl shadow-sm border border-[#e6edf4] p-6">
+                  <h2 class="text-[#0c151d] text-lg font-bold mb-4">Programar Patrullaje</h2>
+                  
+                  <form id="patrolForm" class="space-y-4">
+                    <div>
+                      <label class="block text-[#0c151d] text-sm font-medium mb-2">Nombre del Patrullaje</label>
+                      <input type="text" id="patrolName" placeholder="Ej. PatrullajeZonaNorte" 
+                        class="w-full rounded-lg text-[#0c151d] border border-[#e6edf4] bg-white h-12 px-4 text-sm placeholder:text-[#4574a1] focus:border-[#359dff] focus:ring-1 focus:ring-[#359dff]">
+                    </div>
+                    
+                    <div>
+                      <label class="block text-[#0c151d] text-sm font-medium mb-2">Tipo de Patrullaje</label>
+                      <select id="patrolType" class="w-full rounded-lg text-[#0c151d] border border-[#e6edf4] bg-white h-12 px-4 text-sm focus:border-[#359dff] focus:ring-1 focus:ring-[#359dff]">
+                        <option value="rutinario">Rutinario</option>
+                        <option value="especial">Especial</option>
+                        <option value="emergencia">Emergencia</option>
+                        <option value="preventivo">Preventivo</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label class="block text-[#0c151d] text-sm font-medium mb-2">Recursos Asignados</label>
+                      <select id="patrolResources" multiple class="w-full rounded-lg text-[#0c151d] border border-[#e6edf4] bg-white h-24 px-4 py-2 text-sm focus:border-[#359dff] focus:ring-1 focus:ring-[#359dff]">
+                        <option value="vehiculo1">Vehículo 1</option>
+                        <option value="vehiculo2">Vehículo 2</option>
+                        <option value="vehiculo3">Vehículo 3</option>
+                        <option value="oficial1">Oficial 1</option>
+                        <option value="oficial2">Oficial 2</option>
+                        <option value="oficial3">Oficial 3</option>
+                        <option value="oficial4">Oficial 4</option>
+                        <option value="oficial5">Oficial 5</option>
+                      </select>
+                      <p class="text-xs text-[#4574a1] mt-1">Mantén Ctrl para seleccionar varios</p>
+                    </div>
+                    
+                    <div>
+                      <label class="block text-[#0c151d] text-sm font-medium mb-2">Fecha y Hora</label>
+                      <input type="datetime-local" id="patrolDate" 
+                        class="w-full rounded-lg text-[#0c151d] border border-[#e6edf4] bg-white h-12 px-4 text-sm focus:border-[#359dff] focus:ring-1 focus:ring-[#359dff]">
+                    </div>
+                    
+                    <div>
+                      <label class="block text-[#0c151d] text-sm font-medium mb-2">Duración (horas)</label>
+                      <input type="number" id="patrolDuration" min="1" max="12" value="2"
+                        class="w-full rounded-lg text-[#0c151d] border border-[#e6edf4] bg-white h-12 px-4 text-sm focus:border-[#359dff] focus:ring-1 focus:ring-[#359dff]">
+                    </div>
+                    
+                    <button type="submit" class="w-full flex items-center justify-center rounded-lg h-12 bg-[#359dff] text-white font-bold hover:bg-[#2080dd] transition-colors">
+                      Guardar Patrullaje
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Lista de Patrullajes y Mapa -->
+              <div class="flex-1 space-y-6">
+                <!-- Tabla de Patrullajes -->
+                <div class="bg-white rounded-xl shadow-sm border border-[#e6edf4]">
+                  <div class="p-6 border-b border-[#e6edf4]">
+                    <div class="flex items-center justify-between">
+                      <h2 class="text-[#0c151d] text-lg font-bold">Patrullajes Programados</h2>
+                      <div class="relative">
+                        <input type="text" id="searchPatrol" placeholder="Buscar patrullaje..." 
+                          class="rounded-lg border border-[#e6edf4] h-10 pl-10 pr-4 w-64 text-sm placeholder:text-[#4574a1]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#4574a1" viewBox="0 0 256 256" class="absolute left-3 top-1/2 -translate-y-1/2"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+                      </div>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex gap-4 mt-4">
+                      <button onclick="setTab('activos')" id="tabActivos" class="px-4 py-2 text-sm font-medium border-b-2 border-[#359dff] text-[#359dff]">Activos</button>
+                      <button onclick="setTab('futuros')" id="tabFuturos" class="px-4 py-2 text-sm font-medium text-[#4574a1] hover:text-[#0c151d]">Futuros</button>
+                      <button onclick="setTab('completados')" id="tabCompletados" class="px-4 py-2 text-sm font-medium text-[#4574a1] hover:text-[#0c151d]">Completados</button>
+                    </div>
+                  </div>
+                  
+                  <div class="overflow-x-auto">
+                    <table class="w-full">
+                      <thead class="bg-slate-50">
+                        <tr>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Nombre</th>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Tipo</th>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Recursos</th>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Fecha y Hora</th>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Estado</th>
+                          <th class="text-left px-6 py-3 text-xs font-medium text-[#4574a1] uppercase tracking-wider">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody id="patrolsTableBody" class="divide-y divide-[#e6edf4]">
+                        <!-- Los patrullajes se cargarán aquí -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Mapa -->
+                <div class="bg-white rounded-xl shadow-sm border border-[#e6edf4] overflow-hidden">
+                  <div class="p-4 border-b border-[#e6edf4]">
+                    <h3 class="text-[#0c151d] font-medium">Mapa de Patrullajes</h3>
+                  </div>
+                  <div id="patrolMap" class="h-[350px]"></div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+      // Verificar autenticación y que sea autoridad
+      auth.requireAuth();
+      
+      const user = auth.getUser();
+      if (user) {
+        document.getElementById('userName').textContent = `Hola, ${user.fullName || user.email}`;
+        
+        // Verificar si es autoridad
+        if (user.userType !== 'authority' && user.userType !== 'admin') {
+          alert('Acceso denegado. Esta página es solo para autoridades.');
+          window.location.href = 'dashboard.html';
+        }
+      }
+
+      // Datos de patrullajes (simulados, en producción vendrían del backend)
+      let patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [
+        {
+          id: 1,
+          nombre: 'Patrullaje Centro',
+          tipo: 'Rutinario',
+          recursos: ['Vehículo 2', 'Oficial 3', 'Oficial 4'],
+          fecha: '2024-03-14T14:00',
+          duracion: 2,
+          estado: 'en_curso',
+          lat: -12.0464,
+          lng: -77.0428
+        },
+        {
+          id: 2,
+          nombre: 'Patrullaje Sur',
+          tipo: 'Especial',
+          recursos: ['Vehículo 3', 'Oficial 5', 'Oficial 6'],
+          fecha: '2024-03-14T18:00',
+          duracion: 2,
+          estado: 'completado',
+          lat: -12.1191,
+          lng: -77.0311
+        },
+        {
+          id: 3,
+          nombre: 'Patrullaje Este',
+          tipo: 'Rutinario',
+          recursos: ['Vehículo 1', 'Oficial 1', 'Oficial 2'],
+          fecha: '2024-03-15T08:00',
+          duracion: 2,
+          estado: 'programado',
+          lat: -12.0789,
+          lng: -76.9714
+        }
+      ];
+
+      let currentTab = 'activos';
+      let patrolMap = null;
+      let patrolMarkers = [];
+
+      // Inicializar mapa
+      function initPatrolMap() {
+        patrolMap = L.map('patrolMap').setView([-12.0464, -77.0428], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(patrolMap);
+        
+        updateMapMarkers();
+      }
+
+      // Actualizar marcadores del mapa
+      function updateMapMarkers() {
+        // Limpiar marcadores existentes
+        patrolMarkers.forEach(m => patrolMap.removeLayer(m));
+        patrolMarkers = [];
+
+        patrullajes.forEach(p => {
+          const color = p.estado === 'en_curso' ? 'green' : p.estado === 'programado' ? 'blue' : 'gray';
+          const icon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 256 256"><path d="M240,160v24a16,16,0,0,1-16,16H204a24,24,0,0,1-48,0H100a24,24,0,0,1-48,0H32a16,16,0,0,1-16-16V160Z"/></svg>
+                   </div>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+          });
+
+          const marker = L.marker([p.lat, p.lng], { icon })
+            .addTo(patrolMap)
+            .bindPopup(`<b>${p.nombre}</b><br>Estado: ${getEstadoLabel(p.estado)}<br>Tipo: ${p.tipo}`);
+          
+          patrolMarkers.push(marker);
+        });
+      }
+
+      // Obtener etiqueta de estado
+      function getEstadoLabel(estado) {
+        const labels = {
+          'en_curso': 'En curso',
+          'programado': 'Programado',
+          'completado': 'Completado'
+        };
+        return labels[estado] || estado;
+      }
+
+      // Obtener clase de estado
+      function getEstadoClass(estado) {
+        const classes = {
+          'en_curso': 'bg-green-100 text-green-800',
+          'programado': 'bg-blue-100 text-blue-800',
+          'completado': 'bg-gray-100 text-gray-800'
+        };
+        return classes[estado] || 'bg-gray-100 text-gray-800';
+      }
+
+      // Renderizar tabla
+      function renderPatrols() {
+        const tbody = document.getElementById('patrolsTableBody');
+        
+        let filtered = patrullajes;
+        if (currentTab === 'activos') {
+          filtered = patrullajes.filter(p => p.estado === 'en_curso');
+        } else if (currentTab === 'futuros') {
+          filtered = patrullajes.filter(p => p.estado === 'programado');
+        } else {
+          filtered = patrullajes.filter(p => p.estado === 'completado');
+        }
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="px-6 py-8 text-center text-[#4574a1]">
+                No hay patrullajes ${currentTab === 'activos' ? 'activos' : currentTab === 'futuros' ? 'programados' : 'completados'}
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(p => `
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-4 text-sm font-medium text-[#0c151d]">${p.nombre}</td>
+            <td class="px-6 py-4">
+              <span class="text-[#359dff] text-sm">${p.tipo}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-[#4574a1]">${p.recursos.join(', ')}</td>
+            <td class="px-6 py-4 text-sm text-[#4574a1]">${formatDate(p.fecha)} - ${formatEndTime(p.fecha, p.duracion)}</td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 text-xs font-medium rounded-full ${getEstadoClass(p.estado)}">${getEstadoLabel(p.estado)}</span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex gap-2">
+                ${p.estado === 'programado' ? `
+                  <button onclick="iniciarPatrullaje(${p.id})" class="text-green-600 hover:text-green-800 text-sm font-medium">Iniciar</button>
+                ` : ''}
+                ${p.estado === 'en_curso' ? `
+                  <button onclick="completarPatrullaje(${p.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Completar</button>
+                ` : ''}
+                <button onclick="verEnMapa(${p.lat}, ${p.lng})" class="text-[#4574a1] hover:text-[#0c151d] text-sm">Ver mapa</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Formatear fecha
+      function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('es-PE', { year: 'numeric', month: '2-digit', day: '2-digit' }) + ' ' + 
+               date.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      // Calcular hora de fin
+      function formatEndTime(dateStr, duration) {
+        const date = new Date(dateStr);
+        date.setHours(date.getHours() + duration);
+        return date.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      // Cambiar tab
+      function setTab(tab) {
+        currentTab = tab;
+        
+        // Actualizar estilos de tabs
+        document.getElementById('tabActivos').className = tab === 'activos' 
+          ? 'px-4 py-2 text-sm font-medium border-b-2 border-[#359dff] text-[#359dff]'
+          : 'px-4 py-2 text-sm font-medium text-[#4574a1] hover:text-[#0c151d]';
+        document.getElementById('tabFuturos').className = tab === 'futuros'
+          ? 'px-4 py-2 text-sm font-medium border-b-2 border-[#359dff] text-[#359dff]'
+          : 'px-4 py-2 text-sm font-medium text-[#4574a1] hover:text-[#0c151d]';
+        document.getElementById('tabCompletados').className = tab === 'completados'
+          ? 'px-4 py-2 text-sm font-medium border-b-2 border-[#359dff] text-[#359dff]'
+          : 'px-4 py-2 text-sm font-medium text-[#4574a1] hover:text-[#0c151d]';
+        
+        renderPatrols();
+      }
+
+      // Iniciar patrullaje
+      function iniciarPatrullaje(id) {
+        const patrol = patrullajes.find(p => p.id === id);
+        if (patrol) {
+          patrol.estado = 'en_curso';
+          savePatrols();
+          renderPatrols();
+          updateMapMarkers();
+          alert('✅ Patrullaje iniciado');
+        }
+      }
+
+      // Completar patrullaje
+      function completarPatrullaje(id) {
+        const patrol = patrullajes.find(p => p.id === id);
+        if (patrol) {
+          patrol.estado = 'completado';
+          savePatrols();
+          renderPatrols();
+          updateMapMarkers();
+          alert('✅ Patrullaje completado');
+        }
+      }
+
+      // Ver en mapa
+      function verEnMapa(lat, lng) {
+        patrolMap.setView([lat, lng], 15);
+      }
+
+      // Guardar patrullajes
+      function savePatrols() {
+        localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
+      }
+
+      // Formulario
+      document.getElementById('patrolForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('patrolName').value;
+        const type = document.getElementById('patrolType');
+        const resources = Array.from(document.getElementById('patrolResources').selectedOptions).map(o => o.text);
+        const date = document.getElementById('patrolDate').value;
+        const duration = parseInt(document.getElementById('patrolDuration').value);
+
+        if (!name || !date || resources.length === 0) {
+          alert('Por favor complete todos los campos');
+          return;
+        }
+
+        const newPatrol = {
+          id: Date.now(),
+          nombre: name,
+          tipo: type.options[type.selectedIndex].text,
+          recursos: resources,
+          fecha: date,
+          duracion: duration,
+          estado: 'programado',
+          lat: -12.0464 + (Math.random() - 0.5) * 0.1,
+          lng: -77.0428 + (Math.random() - 0.5) * 0.1
+        };
+
+        patrullajes.push(newPatrol);
+        savePatrols();
+        renderPatrols();
+        updateMapMarkers();
+        
+        e.target.reset();
+        alert('✅ Patrullaje programado exitosamente');
+      });
+
+      // Búsqueda
+      document.getElementById('searchPatrol').addEventListener('input', (e) => {
+        const search = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#patrolsTableBody tr');
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(search) ? '' : 'none';
+        });
+      });
+
+      // Inicializar
+      document.addEventListener('DOMContentLoaded', () => {
+        initPatrolMap();
+        renderPatrols();
+        
+        // Establecer fecha mínima
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('patrolDate').min = now.toISOString().slice(0, 16);
+      });
+    </script>
+</body>
+</html>
