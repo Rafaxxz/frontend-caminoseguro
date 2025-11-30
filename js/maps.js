@@ -88,16 +88,18 @@ async function loadHeatmapData(map, filter = 'all', timeRange = '7d') {
       map.removeLayer(heatLayer);
     }
 
-    // Crear nueva capa de heatmap
+    // Crear nueva capa de heatmap con puntos más grandes y visibles
     heatLayer = L.heatLayer(heatmapData, {
-      radius: 35,
-      blur: 25,
-      maxZoom: 17,
+      radius: 50,
+      blur: 30,
+      maxZoom: 18,
       max: 10,
+      minOpacity: 0.5,
       gradient: {
-        0.0: 'green',
-        0.3: 'yellow',
-        0.6: 'orange',
+        0.0: 'blue',
+        0.25: 'lime',
+        0.5: 'yellow',
+        0.75: 'orange',
         1.0: 'red'
       }
     }).addTo(map);
@@ -106,9 +108,17 @@ async function loadHeatmapData(map, filter = 'all', timeRange = '7d') {
     console.error('Error loading heatmap data:', error);
     const demoData = getDemoHeatmapData();
     heatLayer = L.heatLayer(demoData, {
-      radius: 35,
-      blur: 25,
-      maxZoom: 17
+      radius: 50,
+      blur: 30,
+      maxZoom: 18,
+      minOpacity: 0.5,
+      gradient: {
+        0.0: 'blue',
+        0.25: 'lime',
+        0.5: 'yellow',
+        0.75: 'orange',
+        1.0: 'red'
+      }
     }).addTo(map);
   }
 }

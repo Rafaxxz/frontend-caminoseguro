@@ -141,6 +141,30 @@
                 </div>
               </div>
             </div>
+
+            <!-- Panel de Autoridad (solo visible para autoridades) -->
+            <div id="authorityPanel" class="hidden mt-8 bg-white rounded-xl shadow-sm border border-[#e6edf4]">
+              <div class="p-6 border-b border-[#e6edf4]">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="bg-purple-100 p-2 rounded-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#9333ea" viewBox="0 0 256 256"><path d="M208,136H176V104h32a16,16,0,0,0,0-32H176V56a16,16,0,0,0-32,0V72H112V56a16,16,0,0,0-32,0V72H48a16,16,0,0,0,0,32H80v32H48a16,16,0,0,0,0,32H80v16a16,16,0,0,0,32,0V168h32v16a16,16,0,0,0,32,0V168h32a16,16,0,0,0,0-32Zm-64,0H112V104h32Z"/></svg>
+                    </div>
+                    <h2 class="text-[#0c151d] text-lg font-bold">Panel de Autoridad - Reportes Pendientes</h2>
+                  </div>
+                  <span class="bg-purple-100 text-purple-800 text-xs font-medium px-3 py-1 rounded-full">Autoridad</span>
+                </div>
+              </div>
+              <div id="pendingReportsList" class="p-6">
+                <div class="flex items-center justify-center py-8 text-[#4574a1]">
+                  <svg class="animate-spin h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Cargando reportes pendientes...
+                </div>
+              </div>
+            </div>
           </main>
         </div>
       </div>
@@ -153,8 +177,90 @@
       
       // Display user name
       const user = auth.getUser();
+      const isAuthority = user && (user.userType === 'authority' || user.userType === 'admin');
+      
       if (user) {
         document.getElementById('userName').textContent = `Hola, ${user.fullName || user.email}`;
+      }
+      
+      // Mostrar panel de autoridad si corresponde
+      if (isAuthority) {
+        document.getElementById('authorityPanel').classList.remove('hidden');
+        loadPendingReports();
+      }
+      
+      // Cargar reportes pendientes de aprobación
+      async function loadPendingReports() {
+        try {
+          const response = await api.get('/reports?status=pending&limit=10').catch(() => null);
+          const pendingList = document.getElementById('pendingReportsList');
+          const reports = response?.data?.reports || [];
+          
+          if (response && response.success && reports.length > 0) {
+            pendingList.innerHTML = reports.map(report => `
+              <div class="flex items-center gap-4 py-4 border-b border-[#e6edf4] last:border-0" id="report-${report.uuid}">
+                <div class="bg-yellow-100 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f59e0b" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-[#0c151d] font-medium">${report.incidentType || 'Incidente'}</p>
+                  <p class="text-[#4574a1] text-sm">${report.location?.address || 'Ubicación no especificada'}</p>
+                  <p class="text-gray-500 text-xs mt-1">${report.description?.substring(0, 100) || 'Sin descripción'}...</p>
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="approveReport('${report.uuid}')" class="px-3 py-1.5 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z"/></svg>
+                    Aprobar
+                  </button>
+                  <button onclick="rejectReport('${report.uuid}')" class="px-3 py-1.5 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+                    Rechazar
+                  </button>
+                </div>
+              </div>
+            `).join('');
+          } else {
+            pendingList.innerHTML = `
+              <div class="text-center py-8 text-[#4574a1]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 256 256" class="mx-auto mb-3 opacity-50"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                <p>No hay reportes pendientes de aprobación</p>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error('Error loading pending reports:', error);
+        }
+      }
+      
+      // Aprobar reporte
+      async function approveReport(uuid) {
+        try {
+          const response = await api.put(`/reports/${uuid}/status`, { status: 'verified' });
+          if (response.success) {
+            document.getElementById(`report-${uuid}`).remove();
+            alert('✅ Reporte aprobado exitosamente');
+            loadDashboard();
+          }
+        } catch (error) {
+          alert('Error al aprobar el reporte: ' + error.message);
+        }
+      }
+      
+      // Rechazar reporte
+      async function rejectReport(uuid) {
+        const reason = prompt('Ingrese el motivo del rechazo:');
+        if (reason === null) return;
+        
+        try {
+          const response = await api.put(`/reports/${uuid}/status`, { status: 'rejected', reason });
+          if (response.success) {
+            document.getElementById(`report-${uuid}`).remove();
+            alert('❌ Reporte rechazado');
+            loadDashboard();
+          }
+        } catch (error) {
+          alert('Error al rechazar el reporte: ' + error.message);
+        }
       }
       
       // Load dashboard data
