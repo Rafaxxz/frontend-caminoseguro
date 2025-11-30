@@ -234,17 +234,64 @@
           } else {
             console.error('Error al cargar patrullajes');
             // Usar datos locales como fallback
-            patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [];
-            renderPatrols();
-            updateMapMarkers();
+            loadLocalPatrols();
           }
         } catch (error) {
           console.error('Error de conexión:', error);
           // Usar datos locales como fallback
-          patrullajes = JSON.parse(localStorage.getItem('patrullajes')) || [];
-          renderPatrols();
-          updateMapMarkers();
+          loadLocalPatrols();
         }
+      }
+
+      // Cargar patrullajes locales o de ejemplo
+      function loadLocalPatrols() {
+        const stored = localStorage.getItem('patrullajes');
+        if (stored) {
+          patrullajes = JSON.parse(stored);
+        } else {
+          // Datos de ejemplo para demostración
+          patrullajes = [
+            {
+              id: 1,
+              uuid: 'demo-1',
+              nombre: 'Patrullaje Centro',
+              tipo: 'Rutinario',
+              recursos: ['Vehículo 2', 'Oficial 3', 'Oficial 4'],
+              fecha: new Date().toISOString(),
+              duracion: 2,
+              estado: 'en_curso',
+              lat: -12.0464,
+              lng: -77.0428
+            },
+            {
+              id: 2,
+              uuid: 'demo-2',
+              nombre: 'Patrullaje Miraflores',
+              tipo: 'Especial',
+              recursos: ['Vehículo 1', 'Oficial 1', 'Oficial 2'],
+              fecha: new Date(Date.now() + 3600000).toISOString(),
+              duracion: 3,
+              estado: 'programado',
+              lat: -12.1191,
+              lng: -77.0311
+            },
+            {
+              id: 3,
+              uuid: 'demo-3',
+              nombre: 'Patrullaje San Isidro',
+              tipo: 'Preventivo',
+              recursos: ['Vehículo 3', 'Oficial 5'],
+              fecha: new Date(Date.now() - 7200000).toISOString(),
+              duracion: 2,
+              estado: 'completado',
+              lat: -12.0986,
+              lng: -77.0352
+            }
+          ];
+          localStorage.setItem('patrullajes', JSON.stringify(patrullajes));
+        }
+        renderPatrols();
+        updateMapMarkers();
       }
 
       // Mapear estado desde API
@@ -283,9 +330,13 @@
 
       // Actualizar marcadores del mapa
       function updateMapMarkers() {
+        if (!patrolMap) return; // Si el mapa no está inicializado, salir
+        
         // Limpiar marcadores existentes
         patrolMarkers.forEach(m => patrolMap.removeLayer(m));
         patrolMarkers = [];
+
+        if (!patrullajes || patrullajes.length === 0) return;
 
         patrullajes.forEach(p => {
           const color = p.estado === 'en_curso' ? 'green' : p.estado === 'programado' ? 'blue' : 'gray';
