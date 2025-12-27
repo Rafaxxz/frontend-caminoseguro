@@ -226,34 +226,6 @@ Abrir navegador en: `http://localhost:8000`
    - Actualizar estado de incidentes
    - Coordinar respuesta
 
-## 🌟 Nuestro Equipo
-
-El proyecto CaminoSeguro fue desarrollado por un equipo multidisciplinario comprometido con mejorar la seguridad vial en el Perú:
-
-### **Alvaro Erick Jordan Villa**
-*Frontend Developer & UX Designer*
-
-Responsable del diseño de interfaz y experiencia de usuario. Se destaca por trabajar bien en equipo y por mantener siempre una actitud empática. Ha contribuido al desarrollo de los módulos de reportes y dashboard, enfocándose en crear interfaces intuitivas y accesibles.
-
-### **Marco Antonio Huamancayo Rojas**
-*Backend Integration & API Developer*
-
-Especializado en la integración del frontend con la API REST. Se destaca por ser alguien centrado y determinado a la hora de trabajar en grupo. Ha desarrollado las funcionalidades de autenticación y gestión de patrullajes, asegurando comunicación eficiente con el backend.
-
-### **Felix Ignacio Cortes Rojas**
-*Maps & Geolocation Specialist*
-
-Responsable de la implementación de funcionalidades geoespaciales. Se caracteriza por trabajar bien bajo presión y tener una actitud predominantemente positiva. Ha liderado el desarrollo de los módulos de mapas de calor, rutas seguras y puntos de ayuda.
-
-### **Josue Gonzalo Fernandez Quille**
-*Frontend Developer & Content Manager*
-
-Enfocado en el desarrollo de páginas y gestión de contenido educativo. Se considera una persona colaborativa y empática. Ha contribuido al módulo de educación preventiva y a la estructuración del contenido informativo de la plataforma.
-
-### **Fernando José Zamora Solis**
-*Quality Assurance & Testing Lead*
-
-Responsable de asegurar la calidad y funcionalidad del sistema. Es una persona proactiva y adaptable con buena comunicación. Ha coordinado las pruebas de usabilidad, testing cross-browser y validación de funcionalidades en diferentes dispositivos.
 
 ## 🎯 Objetivos del Proyecto
 
