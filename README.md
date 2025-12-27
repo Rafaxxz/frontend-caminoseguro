@@ -277,12 +277,12 @@ La aplicación se conecta a una API REST desplegada en Render:
 - `GET /rutas` - Calcular rutas seguras
 - `GET /patrullajes` - Gestión de patrullajes (autoridades)
 
-> 📌 **Nota**: La API maneja autenticación mediante tokens JWT almacenados en localStorage.
+> 📌 **Nota**: La API maneja autenticación mediante tokens JWT almacenados en localStorage. El backend puede tener tiempo de inicialización en servicios gratuitos de Render (cold start).
 
 ## 📱 Acceso a la Aplicación
 
-- **Sitio Web**: [https://rafaxxz.github.io/frontend-caminoseguro/](https://rafaxxz.github.io/frontend-caminoseguro/) (si está desplegado en GitHub Pages)
 - **Repositorio**: [https://github.com/Rafaxxz/frontend-caminoseguro](https://github.com/Rafaxxz/frontend-caminoseguro)
+- **Demo**: Puede estar disponible en GitHub Pages
 
 ## 🤝 Contribuir
 
