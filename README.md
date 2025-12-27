@@ -303,16 +303,3 @@ Para consultas sobre el proyecto:
 
 > 📧 **Nota**: Este es un proyecto académico. Para contacto con el equipo de desarrollo, usar el sistema de Issues en GitHub.
 
-## 📄 Licencia
-
-Este proyecto es de código abierto para fines educativos y de mejora de la seguridad vial en el Perú.
-
-## 🙏 Agradecimientos
-
-Agradecemos a todos los usuarios que contribuyen con reportes y hacen posible una red de seguridad vial más efectiva. Gracias también a las autoridades que colaboran con el sistema para mejorar la seguridad de todos.
-
----
-
-⭐ **CaminoSeguro - Tu seguridad en el camino, nuestra prioridad** ⭐
-
-*Desarrollado con ❤️ por el equipo de CaminoSeguro*
