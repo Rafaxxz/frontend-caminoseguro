@@ -231,19 +231,29 @@ Abrir navegador en: `http://localhost:8000`
 El proyecto CaminoSeguro fue desarrollado por un equipo multidisciplinario comprometido con mejorar la seguridad vial en el Perú:
 
 ### **Alvaro Erick Jordan Villa**
-Desarrollador del proyecto. Se destaca por trabajar bien en equipo y por mantener siempre una actitud empática. Confía en que el aplicativo Camino Seguro pueda aportar valor y ser de ayuda en la rutina diaria de los usuarios.
+*Frontend Developer & UX Designer*
+
+Responsable del diseño de interfaz y experiencia de usuario. Se destaca por trabajar bien en equipo y por mantener siempre una actitud empática. Ha contribuido al desarrollo de los módulos de reportes y dashboard, enfocándose en crear interfaces intuitivas y accesibles.
 
 ### **Marco Antonio Huamancayo Rojas**
-Desarrollador del proyecto. Se destaca por ser alguien centrado, determinado a la hora de trabajar en grupo y buscando apoyar a quien necesita de ayuda. Está seguro que la app de CaminoSeguro podrá ser de utilidad en el día a día de los usuarios.
+*Backend Integration & API Developer*
+
+Especializado en la integración del frontend con la API REST. Se destaca por ser alguien centrado y determinado a la hora de trabajar en grupo. Ha desarrollado las funcionalidades de autenticación y gestión de patrullajes, asegurando comunicación eficiente con el backend.
 
 ### **Felix Ignacio Cortes Rojas**
-Desarrollador del proyecto. Se caracteriza por trabajar bien bajo presión y tener una actitud predominantemente positiva. Considera que el aplicativo Camino Seguro es capaz de aportar un bien en pos de la seguridad de la ciudad y país.
+*Maps & Geolocation Specialist*
+
+Responsable de la implementación de funcionalidades geoespaciales. Se caracteriza por trabajar bien bajo presión y tener una actitud predominantemente positiva. Ha liderado el desarrollo de los módulos de mapas de calor, rutas seguras y puntos de ayuda.
 
 ### **Josue Gonzalo Fernandez Quille**
-Desarrollador del proyecto. Se considera una persona colaborativa con su grupo de trabajo y empática. Espera que el aplicativo Camino Seguro sea de utilidad en el día a día de los usuarios.
+*Frontend Developer & Content Manager*
+
+Enfocado en el desarrollo de páginas y gestión de contenido educativo. Se considera una persona colaborativa y empática. Ha contribuido al módulo de educación preventiva y a la estructuración del contenido informativo de la plataforma.
 
 ### **Fernando José Zamora Solis**
-Desarrollador del proyecto. Es una persona proactiva, adaptable y con buena comunicación en el trabajo en equipo. Está seguro de que el aplicativo Camino Seguro será una herramienta práctica y confiable que acompañará y apoyará los desplazamientos cotidianos de los usuarios.
+*Quality Assurance & Testing Lead*
+
+Responsable de asegurar la calidad y funcionalidad del sistema. Es una persona proactiva y adaptable con buena comunicación. Ha coordinado las pruebas de usabilidad, testing cross-browser y validación de funcionalidades en diferentes dispositivos.
 
 ## 🎯 Objetivos del Proyecto
 
@@ -286,10 +296,12 @@ Las contribuciones son bienvenidas. Para cambios importantes:
 
 ## 📞 Contacto
 
-- **Email**: contacto@caminoseguro.pe
-- **Soporte**: soporte@caminoseguro.pe
-- **Teléfono**: +51 999 888 777
+Para consultas sobre el proyecto:
+
+- **GitHub**: [github.com/Rafaxxz/frontend-caminoseguro](https://github.com/Rafaxxz/frontend-caminoseguro)
 - **Ubicación**: Lima, Perú
+
+> 📧 **Nota**: Este es un proyecto académico. Para contacto con el equipo de desarrollo, usar el sistema de Issues en GitHub.
 
 ## 📄 Licencia
 
